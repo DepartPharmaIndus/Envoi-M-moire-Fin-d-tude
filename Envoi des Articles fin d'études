@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Envoi des Articles des projets de fin d'étude  — USS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:      #0a4f5e;
+      --primary-dk:   #073845;
+      --primary-lt:   #e4f2f5;
+      --gold:         #c9921e;
+      --gold-lt:      #fdf3e0;
+      --text:         #1c2b35;
+      --muted:        #607080;
+      --border:       #c5d6de;
+      --err:          #c0392b;
+      --white:        #ffffff;
+      --bg:           #edf2f5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─────────────────── HEADER ─────────────────── */
+    .site-header {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 22px 24px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 3px 18px rgba(0,0,0,0.2);
+    }
+
+    .univ-lbl {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      opacity: .6;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .site-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.25rem, 4vw, 1.85rem);
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: .3px;
+    }
+
+    /* ─────────────────── TABS ─────────────────── */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 3px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      background: rgba(255,255,255,.1);
+      border: none;
+      color: rgba(255,255,255,.6);
+      padding: 11px 30px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 7px 7px 0 0;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { background: rgba(255,255,255,.2); color: #fff; }
+    .tab-btn.active { background: var(--bg); color: var(--primary); font-weight: 700; }
+
+    /* ─────────────────── MAIN ─────────────────── */
+    .main {
+      max-width: 740px;
+      margin: 38px auto;
+      padding: 0 16px 48px;
+    }
+
+    .page { display: none; }
+    .page.active {
+      display: block;
+      animation: slideUp .3s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─────────────────── CARD ─────────────────── */
+    .form-card {
+      background: var(--white);
+      border-radius: 18px;
+      box-shadow: 0 6px 36px rgba(0,0,0,.09);
+      overflow: hidden;
+    }
+
+    .card-head {
+      background: linear-gradient(140deg, var(--primary) 0%, #0e6d82 100%);
+      padding: 34px 40px 40px;
+      color: #fff;
+      position: relative;
+    }
+    .card-head::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 26px;
+      background: var(--white);
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 13px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .card-head h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.45rem, 4vw, 1.95rem);
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .card-head p {
+      font-size: 13px;
+      opacity: .8;
+      line-height: 1.55;
+      max-width: 480px;
+    }
+
+    .card-head em {
+      font-size: 11.5px;
+      opacity: .7;
+      font-style: normal;
+      display: block;
+      margin-top: 6px;
+    }
+
+    /* ─────────────────── PROGRESS ─────────────────── */
+    .prog-wrap {
+      padding: 17px 40px;
+      border-bottom: 1px solid var(--border);
+      background: #f9fbfc;
+    }
+    .prog-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 7px;
+    }
+    .prog-meta .cnt { color: var(--primary); font-weight: 700; }
+    .pbar-track {
+      height: 5px;
+      background: #dce9ed;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .pbar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--gold));
+      border-radius: 10px;
+      transition: width .35s ease;
+    }
+
+    /* ─────────────────── SECTION ─────────────────── */
+    .sec {
+      padding: 26px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sec-lbl {
+      font-size: 9.5px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sec-lbl::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--primary-lt), transparent);
+    }
+
+    /* ─────────────────── FIELDS ─────────────────── */
+    .fld { margin-bottom: 17px; }
+    .fld:last-child { margin-bottom: 0; }
+
+    .g2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .lbl {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: .2px;
+    }
+    .lbl .req  { color: var(--gold); margin-left: 2px; }
+    .lbl .opt  { color: var(--muted); font-weight: 400; font-size: 11px; margin-left: 4px; }
+    .hint      { display: block; font-size: 10.5px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
+    .inp {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+    }
+    .inp:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(10,79,94,.1);
+    }
+    .inp.bad { border-color: var(--err); }
+    .inp.ok  { border-color: #27ae60; }
+
+    .emsg {
+      display: none;
+      font-size: 11px;
+      color: var(--err);
+      margin-top: 5px;
+      align-items: center;
+      gap: 4px;
+    }
+    .emsg.show { display: flex; }
+    .emsg::before { content: '⚠'; font-size: 10px; }
+
+    /* ─────────────────── RADIO ─────────────────── */
+    .radio-row { display: flex; gap: 10px; }
+    .r-opt { flex: 1; }
+    .r-opt input[type="radio"] { display: none; }
+    .r-opt label {
+      display: block;
+      text-align: center;
+      padding: 10px 6px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: all .18s;
+      user-select: none;
+    }
+    .r-opt input[type="radio"]:checked + label {
+      border-color: var(--primary);
+      background: var(--primary-lt);
+      color: var(--primary);
+    }
+
+    /* ─────────────────── SUBMIT ─────────────────── */
+    .sub-area {
+      padding: 24px 40px 32px;
+    }
+    .note {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .note .rs { color: var(--gold); font-weight: 700; }
+
+    .btn-row { display: flex; gap: 12px; }
+
+    .btn-submit {
+      flex: 1;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 13px 28px;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: .3px;
+      transition: background .2s, transform .1s, box-shadow .2s;
+    }
+    .btn-submit:hover {
+      background: var(--primary-dk);
+      box-shadow: 0 4px 16px rgba(10,79,94,.3);
+    }
+    .btn-submit:active { transform: scale(.98); }
+    .btn-submit:disabled {
+      background: var(--muted);
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-reset {
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-reset:hover { border-color: var(--err); color: var(--err); }
+
+    /* ─────────────────── SUCCESS ─────────────────── */
+    .ok-box {
+      display: none;
+      text-align: center;
+      padding: 60px 40px;
+    }
+    .ok-icon {
+      width: 68px; height: 68px;
+      background: #e8f5e9;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 30px;
+    }
+    .ok-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .ok-box p {
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .btn-again {
+      background: var(--primary-lt);
+      color: var(--primary);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-again:hover { background: var(--border); }
+
+    /* ─────────────────── FOOTER ─────────────────── */
+    .site-footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.6;
+    }
+
+    /* ─────────────────── RESPONSIVE ─────────────────── */
+    @media (max-width: 580px) {
+      .main { padding: 0 10px 32px; margin-top: 22px; }
+      .card-head, .sec, .sub-area, .prog-wrap { padding-left: 18px; padding-right: 18px; }
+      .g2 { grid-template-columns: 1fr; }
+      .card-head h2 { font-size: 1.35rem; }
+      .tab-btn { padding: 10px 16px; font-size: 11px; }
+      .radio-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     HEADER + TABS
+════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="univ-lbl">Université des Sciences de la Santé</div>
+  <h1>Envoi des Articles des projets de fin d'étude</h1>
+  <div class="tabs" id="tabs"></div>
+</header>
+
+<!-- ════════════════════════════════════════
+     PAGES DES FORMULAIRES (générées par JS)
+════════════════════════════════════════ -->
+<main class="main" id="main"></main>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="site-footer">
+  <strong>Université des Sciences de la Santé</strong> · Faculté de Pharmacie<br>
+  Formulaire officiel d'Envoi des Articles des projets de fin d'étude
+</footer>
+
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════
+   ⚙️  CONFIGURATION — MODIFIEZ UNIQUEMENT CETTE SECTION
+   ══════════════════════════════════════════════════════════════════════
+
+   ➤ Remplacez la valeur ci-dessous par l'URL de votre Google Apps Script
+     (voir les instructions étape par étape à la fin de ce fichier)
+══════════════════════════════════════════════════════════════════════ */
+const GOOGLE_SCRIPT_URL = 'VOTRE_URL_GOOGLE_SCRIPT_ICI';
+/* ══════════════════════════════════════════════════════════════════════ */
+
+
+/* ─── Définition des spécialités ─── */
+const SPECS = [
+  {
+    id:    'cosderm',
+    label: 'Cosderm',
+    title: 'Rapport de Stage COSDERM',
+    desc:  'Cosmétologie &amp; Dermatologie. Chaque étudiant est tenu de remplir ce formulaire à titre personnel, avec toutes les informations exactes ainsi que le lien Drive du PDF.',
+    color1: '#6b3fa0',
+    color2: '#9b59b6',
+    colorlt: '#f3eafa',
+    tabColor: '#7d4fb5'
+  },
+  {
+    id:    'arip',
+    label: 'Arip',
+    title: 'Rapport de Stage ARIP',
+    desc:  'Spécialité ARIP. Chaque étudiant est tenu de remplir ce formulaire à titre personnel, avec toutes les informations exactes ainsi que le lien Drive du PDF.',
+    color1: '#1a6b3a',
+    color2: '#27ae60',
+    colorlt: '#e6f7ee',
+    tabColor: '#219653'
+  },
+  {
+    id:    'pema',
+    label: 'Pema',
+    title: 'Rapport de Stage PEMA',
+    desc:  'Spécialité PEMA. Chaque étudiant est tenu de remplir ce formulaire à titre personnel, avec toutes les informations exactes ainsi que le lien Drive du PDF.',
+    color1: '#b84800',
+    color2: '#e05a00',
+    colorlt: '#fdf0e8',
+    tabColor: '#d05500'
+  },
+  {
+    id:    'mequip',
+    label: 'Mequip',
+    title: 'Rapport de Stage MEQUIP',
+    desc:  'Spécialité MEQUIP. Chaque étudiant est tenu de remplir ce formulaire à titre personnel, avec toutes les informations exactes ainsi que le lien Drive du PDF.',
+    color1: '#0a3f7a',
+    color2: '#1565c0',
+    colorlt: '#e8f0fb',
+    tabColor: '#1558b0'
+  },
+];
+
+const TOTAL = 12; // Nombre de champs obligatoires
+
+
+/* ─── Génération du HTML du formulaire ─── */
+function buildForm(s) {
+  return `
+  <div class="form-card">
+
+    <!-- En-tête -->
+    <div class="card-head" style="background: linear-gradient(140deg, ${s.color1} 0%, ${s.color2} 100%);">
+      <div class="badge">📋 ${s.label} · M2</div>
+      <h2>${s.title}</h2>
+      <p>${s.desc}
+        <em>Les champs marqués d'un <strong>*</strong> sont obligatoires.</em>
+      </p>
+    </div>
+
+    <!-- Barre de progression -->
+    <div class="prog-wrap">
+      <div class="prog-meta">
+        <span>Progression</span>
+        <span class="cnt" id="ptxt-${s.id}">0 / ${TOTAL} champs</span>
+      </div>
+      <div class="pbar-track">
+        <div class="pbar-fill" id="pbar-${s.id}"></div>
+      </div>
+    </div>
+
+    <!-- Formulaire -->
+    <form id="form-${s.id}" novalidate autocomplete="on">
+
+      <!-- ── Identification ── -->
+      <div class="sec">
+        <div class="sec-lbl">Identification</div>
+
+        <div class="fld">
+          <label class="lbl" for="${s.id}-email">
+            Email <span class="req">*</span>
+            <span class="hint">Adresse email universitaire ou personnelle</span>
+          </label>
+          <input class="inp" type="email" id="${s.id}-email"
+                 name="email" placeholder="exemple@email.com" autocomplete="email">
+          <div class="emsg" id="e-${s.id}-email">Veuillez entrer une adresse email valide.</div>
+        </div>
+
+        <div class="g2">
+          <div class="fld">
+            <label class="lbl" for="${s.id}-num">Numéro sur la liste <span class="req">*</span></label>
+            <input class="inp" type="number" id="${s.id}-num"
+                   name="numero" placeholder="Ex : 42" min="1">
+            <div class="emsg" id="e-${s.id}-num">Ce champ est obligatoire.</div>
+          </div>
+          <div class="fld">
+            <label class="lbl" for="${s.id}-bac">Année bac <span class="req">*</span></label>
+            <input class="inp" type="number" id="${s.id}-bac"
+                   name="annee_bac" placeholder="Ex : 2022" min="2000" max="2035">
+            <div class="emsg" id="e-${s.id}-bac">Ce champ est obligatoire.</div>
+          </div>
+        </div>
+
+        <div class="fld">
+          <label class="lbl" for="${s.id}-mat">Matricule Progres <span class="req">*</span></label>
+          <input class="inp" type="text" id="${s.id}-mat"
+                 name="matricule" placeholder="Ex : USP12345" autocomplete="off">
+          <div class="emsg" id="e-${s.id}-mat">Ce champ est obligatoire.</div>
+        </div>
+
+        <div class="g2">
+          <div class="fld">
+            <label class="lbl" for="${s.id}-nom">
+              NOM <span class="req">*</span>
+              <span class="hint">Tout en majuscules</span>
+            </label>
+            <input class="inp" type="text" id="${s.id}-nom"
+                   name="nom" placeholder="OUKSOUM" autocomplete="family-name">
+            <div class="emsg" id="e-${s.id}-nom">Ce champ est obligatoire.</div>
+          </div>
+          <div class="fld">
+            <label class="lbl" for="${s.id}-prn">
+              PRÉNOM <span class="req">*</span>
+              <span class="hint">Tout en majuscules</span>
+            </label>
+            <input class="inp" type="text" id="${s.id}-prn"
+                   name="prenom" placeholder="ANIS" autocomplete="given-name">
+            <div class="emsg" id="e-${s.id}-prn">Ce champ est obligatoire.</div>
+          </div>
+        </div>
+      </div><!-- /sec Identification -->
+
+      <!-- ── Informations du stage ── -->
+      <div class="sec">
+        <div class="sec-lbl">Informations du Stage</div>
+
+        <div class="fld">
+          <label class="lbl">Mode de travail <span class="req">*</span></label>
+          <div class="radio-row">
+            <div class="r-opt">
+              <input type="radio" id="${s.id}-mono" name="mode_travail" value="Monôme">
+              <label for="${s.id}-mono">Monôme</label>
+            </div>
+            <div class="r-opt">
+              <input type="radio" id="${s.id}-bino" name="mode_travail" value="Binôme">
+              <label for="${s.id}-bino">Binôme</label>
+            </div>
+            <div class="r-opt">
+              <input type="radio" id="${s.id}-trio" name="mode_travail" value="Trinôme">
+              <label for="${s.id}-trio">Trinôme</label>
+            </div>
+          </div>
+          <div class="emsg" id="e-${s.id}-mode">Veuillez sélectionner un mode de travail.</div>
+        </div>
+
+        <div class="g2">
+          <div class="fld">
+            <label class="lbl" for="${s.id}-deb">
+              Début du stage <span class="req">*</span>
+              <span class="hint">Date mentionnée sur la convention</span>
+            </label>
+            <input class="inp" type="date" id="${s.id}-deb" name="debut_stage">
+            <div class="emsg" id="e-${s.id}-deb">Ce champ est obligatoire.</div>
+          </div>
+          <div class="fld">
+            <label class="lbl" for="${s.id}-fin">
+              Fin du stage <span class="req">*</span>
+              <span class="hint">Date mentionnée sur la convention</span>
+            </label>
+            <input class="inp" type="date" id="${s.id}-fin" name="fin_stage">
+            <div class="emsg" id="e-${s.id}-fin">Ce champ est obligatoire.</div>
+          </div>
+        </div>
+
+        <div class="g2">
+          <div class="fld">
+            <label class="lbl" for="${s.id}-enc">Encadrant <span class="req">*</span></label>
+            <input class="inp" type="text" id="${s.id}-enc"
+                   name="encadrant" placeholder="Nom et prénom">
+            <div class="emsg" id="e-${s.id}-enc">Ce champ est obligatoire.</div>
+          </div>
+          <div class="fld">
+            <label class="lbl" for="${s.id}-coenc">
+              Co-Encadrant <span class="opt">(optionnel)</span>
+            </label>
+            <input class="inp" type="text" id="${s.id}-coenc"
+                   name="co_encadrant" placeholder="Nom et prénom">
+          </div>
+        </div>
+      </div><!-- /sec Stage -->
+
+      <!-- ── Rapport & Établissement ── -->
+      <div class="sec">
+        <div class="sec-lbl">Rapport &amp; Établissement</div>
+
+        <div class="fld">
+          <label class="lbl" for="${s.id}-etab">
+            Nom de l'établissement <span class="req">*</span>
+          </label>
+          <input class="inp" type="text" id="${s.id}-etab"
+                 name="etablissement" placeholder="Ex : Saidal — Alger">
+          <div class="emsg" id="e-${s.id}-etab">Ce champ est obligatoire.</div>
+        </div>
+
+        <div class="fld">
+          <label class="lbl" for="${s.id}-lien">
+            Lien Drive du PDF du RAPPORT <span class="req">*</span>
+            <span class="hint">Assurez-vous que le fichier est partagé en accès public (mode "Lien")</span>
+          </label>
+          <input class="inp" type="url" id="${s.id}-lien"
+                 name="lien_drive" placeholder="https://drive.google.com/...">
+          <div class="emsg" id="e-${s.id}-lien">
+            Veuillez entrer un lien valide (commençant par https://).
+          </div>
+        </div>
+      </div><!-- /sec Rapport -->
+
+      <!-- ── Boutons ── -->
+      <div class="sub-area">
+        <p class="note">
+          Les champs marqués d'un <span class="rs">*</span> sont obligatoires.
+        </p>
+        <div class="btn-row">
+          <button type="submit" class="btn-submit" id="sbtn-${s.id}">
+            Soumettre le rapport →
+          </button>
+          <button type="reset" class="btn-reset">Effacer</button>
+        </div>
+      </div>
+
+    </form><!-- /form -->
+
+    <!-- Message de succès -->
+    <div class="ok-box" id="ok-${s.id}">
+      <div class="ok-icon">✓</div>
+      <h3>Rapport soumis !</h3>
+      <p>
+        Votre rapport de stage <strong>${s.label}</strong> a bien été enregistré.<br>
+        Merci pour votre soumission.
+      </p>
+      <button class="btn-again" id="btnagain-${s.id}">
+        Soumettre un autre rapport
+      </button>
+    </div>
+
+  </div><!-- /form-card -->
+  `;
+}
+
+
+/* ─── Initialisation ─── */
+const tabsEl = document.getElementById('tabs');
+const mainEl = document.getElementById('main');
+
+SPECS.forEach((s, i) => {
+  /* ── Onglet ── */
+  const btn = document.createElement('button');
+  btn.className  = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.textContent = s.label;
+  btn.dataset.id  = s.id;
+  btn.dataset.color  = s.tabColor;
+  btn.dataset.colorlt = s.colorlt;
+  btn.addEventListener('click', () => switchTab(s.id));
+  tabsEl.appendChild(btn);
+
+  /* ── Page ── */
+  const pg = document.createElement('div');
+  pg.id        = 'pg-' + s.id;
+  pg.className = 'page' + (i === 0 ? ' active' : '');
+  pg.innerHTML  = buildForm(s);
+  mainEl.appendChild(pg);
+
+  /* ── Couleurs dynamiques pour les éléments interactifs ── */
+  // Progress bar fill
+  const style = document.createElement('style');
+  style.textContent = `
+    #pbar-${s.id} { background: linear-gradient(90deg, ${s.color1}, ${s.color2}); }
+    #form-${s.id} .inp:focus { border-color: ${s.tabColor}; box-shadow: 0 0 0 3px ${s.colorlt}; }
+    #form-${s.id} .r-opt input[type="radio"]:checked + label { border-color: ${s.tabColor}; background: ${s.colorlt}; color: ${s.color1}; }
+    #form-${s.id} .btn-submit { background: ${s.tabColor}; }
+    #form-${s.id} .btn-submit:hover { background: ${s.color1}; box-shadow: 0 4px 16px ${s.colorlt}; }
+    #form-${s.id} .sec-lbl { color: ${s.color1}; }
+    #form-${s.id} .sec-lbl::after { background: linear-gradient(90deg, ${s.colorlt}, transparent); }
+    #pg-${s.id} .prog-meta .cnt { color: ${s.color1}; }
+    #ok-${s.id} h3 { color: ${s.color1}; }
+    #ok-${s.id} .btn-again { background: ${s.colorlt}; color: ${s.color1}; }
+  `;
+  document.head.appendChild(style);
+
+  /* ── Logique formulaire ── */
+  wireForm(s);
+});
+
+
+/* ─── Changement d'onglet ─── */
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const isActive = b.dataset.id === id;
+    b.classList.toggle('active', isActive);
+    if (isActive) {
+      b.style.color = b.dataset.color;
+    } else {
+      b.style.color = '';
+    }
+  });
+  document.querySelectorAll('.page')
+    .forEach(p => p.classList.toggle('active', p.id === 'pg-' + id));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+/* Appliquer la couleur du premier onglet au chargement */
+(function() {
+  const first = document.querySelector('.tab-btn.active');
+  if (first) first.style.color = first.dataset.color;
+})();
+
+
+/* ─── Câblage du formulaire ─── */
+function wireForm(s) {
+  const form    = document.getElementById('form-' + s.id);
+  if (!form) return;
+
+  /* Auto-majuscules */
+  ['nom', 'prenom'].forEach(n => {
+    const el = form.querySelector(`[name="${n}"]`);
+    el?.addEventListener('input', () => el.value = el.value.toUpperCase());
+  });
+
+  /* Progression */
+  form.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input',  () => updateProg(s.id, form));
+    el.addEventListener('change', () => updateProg(s.id, form));
+  });
+
+  /* Soumission */
+  form.addEventListener('submit', e => handleSubmit(e, s, form));
+
+  /* Reset */
+  form.addEventListener('reset', () => {
+    setTimeout(() => {
+      updateProg(s.id, form);
+      form.querySelectorAll('.emsg').forEach(el => el.classList.remove('show'));
+      form.querySelectorAll('.inp').forEach(el => {
+        el.classList.remove('bad', 'ok');
+      });
+    }, 10);
+  });
+
+  /* Bouton "Soumettre un autre" */
+  document.getElementById('btnagain-' + s.id)?.addEventListener('click', () => {
+    document.getElementById('ok-' + s.id).style.display = 'none';
+    form.style.display = '';
+    form.reset();
+  });
+}
+
+
+/* ─── Mise à jour de la progression ─── */
+function updateProg(id, form) {
+  const required = [
+    getVal(form, 'email'),
+    getVal(form, 'numero'),
+    getVal(form, 'annee_bac'),
+    getVal(form, 'matricule'),
+    getVal(form, 'nom'),
+    getVal(form, 'prenom'),
+    getRadio(form, 'mode_travail'),
+    getVal(form, 'debut_stage'),
+    getVal(form, 'fin_stage'),
+    getVal(form, 'encadrant'),
+    getVal(form, 'etablissement'),
+    getVal(form, 'lien_drive'),
+  ];
+  const filled = required.filter(Boolean).length;
+  const pct    = Math.round((filled / TOTAL) * 100);
+  document.getElementById('pbar-' + id).style.width = pct + '%';
+  document.getElementById('ptxt-' + id).textContent  = `${filled} / ${TOTAL} champs`;
+}
+
+const getVal   = (f, n) => f.querySelector(`[name="${n}"]`)?.value.trim() || '';
+const getRadio = (f, n) => f.querySelector(`[name="${n}"]:checked`)?.value || '';
+
+
+/* ─── Validation ─── */
+function validate(s, form) {
+  let ok = true;
+
+  const check = (errId, cond) => {
+    const el = document.getElementById(errId);
+    if (el) el.classList.toggle('show', !cond);
+    if (!cond) ok = false;
+  };
+
+  check(`e-${s.id}-email`,
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(getVal(form, 'email')));
+  check(`e-${s.id}-num`,   getVal(form, 'numero')       !== '');
+  check(`e-${s.id}-bac`,   getVal(form, 'annee_bac')    !== '');
+  check(`e-${s.id}-mat`,   getVal(form, 'matricule')    !== '');
+  check(`e-${s.id}-nom`,   getVal(form, 'nom')          !== '');
+  check(`e-${s.id}-prn`,   getVal(form, 'prenom')       !== '');
+  check(`e-${s.id}-mode`,  getRadio(form,'mode_travail') !== '');
+  check(`e-${s.id}-deb`,   getVal(form, 'debut_stage')  !== '');
+  check(`e-${s.id}-fin`,   getVal(form, 'fin_stage')    !== '');
+  check(`e-${s.id}-enc`,   getVal(form, 'encadrant')    !== '');
+  check(`e-${s.id}-etab`,  getVal(form, 'etablissement') !== '');
+  check(`e-${s.id}-lien`,  getVal(form, 'lien_drive').startsWith('https://'));
+
+  return ok;
+}
+
+
+/* ─── Soumission vers Google Sheets ─── */
+async function handleSubmit(e, s, form) {
+  e.preventDefault();
+  if (!validate(s, form)) return;
+
+  /* Vérification que l'URL est configurée */
+  if (GOOGLE_SCRIPT_URL === 'VOTRE_URL_GOOGLE_SCRIPT_ICI') {
+    alert('⚠️ URL Google Script non configurée.\nVeuillez remplacer VOTRE_URL_GOOGLE_SCRIPT_ICI dans le code HTML.');
+    return;
+  }
+
+  const btn     = document.getElementById('sbtn-' + s.id);
+  btn.disabled  = true;
+  btn.textContent = 'Envoi en cours…';
+
+  /* Construction des données (URLSearchParams = compatible no-cors) */
+  const params = new URLSearchParams({
+    specialite:    s.label,
+    email:         getVal(form, 'email'),
+    numero:        getVal(form, 'numero'),
+    annee_bac:     getVal(form, 'annee_bac'),
+    matricule:     getVal(form, 'matricule'),
+    nom:           getVal(form, 'nom'),
+    prenom:        getVal(form, 'prenom'),
+    mode_travail:  getRadio(form, 'mode_travail'),
+    debut_stage:   getVal(form, 'debut_stage'),
+    fin_stage:     getVal(form, 'fin_stage'),
+    encadrant:     getVal(form, 'encadrant'),
+    co_encadrant:  getVal(form, 'co_encadrant'),
+    etablissement: getVal(form, 'etablissement'),
+    lien_drive:    getVal(form, 'lien_drive'),
+  });
+
+  try {
+    /* mode: 'no-cors' nécessaire pour les requêtes cross-origin vers Apps Script */
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode:   'no-cors',
+      body:   params,
+    });
+
+    /* Afficher le message de succès */
+    form.style.display = 'none';
+    document.getElementById('ok-' + s.id).style.display = 'block';
+
+  } catch (err) {
+    alert('❌ Erreur lors de l\'envoi. Vérifiez votre connexion et réessayez.');
+    btn.disabled    = false;
+    btn.textContent = 'Soumettre le rapport →';
+  }
+}
+</script>
+
+<!--
+╔══════════════════════════════════════════════════════════════════════╗
+║          INSTRUCTIONS : CONNEXION À GOOGLE SHEETS                   ║
+╠══════════════════════════════════════════════════════════════════════╣
+║                                                                      ║
+║  ÉTAPE 1 — Créer le Google Sheet                                    ║
+║  ─────────────────────────────                                       ║
+║  • Ouvrez Google Sheets et créez un nouveau classeur.               ║
+║  • Créez 4 feuilles (onglets) et nommez-les exactement :            ║
+║      Cosderm   Arip   Pema   Mequip                                 ║
+║                                                                      ║
+║  ÉTAPE 2 — Créer le Google Apps Script                              ║
+║  ────────────────────────────────────                                ║
+║  • Dans votre Google Sheet : Extensions → Apps Script               ║
+║  • Supprimez le code existant et collez le code ci-dessous :        ║
+║                                                                      ║
+║  ──────────────── CODE APPS SCRIPT ────────────────                  ║
+║                                                                      ║
+║  function doPost(e) {                                                ║
+║    try {                                                             ║
+║      var ss = SpreadsheetApp.getActiveSpreadsheet();                ║
+║      var spec = e.parameter.specialite;                             ║
+║      var sheet = ss.getSheetByName(spec);                           ║
+║                                                                      ║
+║      if (!sheet) {                                                   ║
+║        sheet = ss.insertSheet(spec);                                ║
+║      }                                                               ║
+║                                                                      ║
+║      // Ajouter les en-têtes si c'est la première ligne             ║
+║      if (sheet.getLastRow() === 0) {                                ║
+║        var headers = [                                               ║
+║          'Date/Heure', 'Spécialité', 'Email', 'N° Liste',          ║
+║          'Année Bac', 'Matricule', 'NOM', 'PRÉNOM',                ║
+║          'Mode', 'Début Stage', 'Fin Stage',                        ║
+║          'Encadrant', 'Co-Encadrant', 'Établissement',              ║
+║          'Lien Drive PDF'                                            ║
+║        ];                                                            ║
+║        sheet.appendRow(headers);                                     ║
+║        sheet.getRange(1,1,1,headers.length)                         ║
+║             .setFontWeight('bold')                                   ║
+║             .setBackground('#0a4f5e')                                ║
+║             .setFontColor('#ffffff');                                ║
+║      }                                                               ║
+║                                                                      ║
+║      sheet.appendRow([                                               ║
+║        new Date().toLocaleString('fr-FR'),                          ║
+║        e.parameter.specialite    || '',                              ║
+║        e.parameter.email         || '',                              ║
+║        e.parameter.numero        || '',                              ║
+║        e.parameter.annee_bac     || '',                              ║
+║        e.parameter.matricule     || '',                              ║
+║        e.parameter.nom           || '',                              ║
+║        e.parameter.prenom        || '',                              ║
+║        e.parameter.mode_travail  || '',                              ║
+║        e.parameter.debut_stage   || '',                              ║
+║        e.parameter.fin_stage     || '',                              ║
+║        e.parameter.encadrant     || '',                              ║
+║        e.parameter.co_encadrant  || '',                              ║
+║        e.parameter.etablissement || '',                              ║
+║        e.parameter.lien_drive    || '',                              ║
+║      ]);                                                             ║
+║                                                                      ║
+║      return ContentService                                           ║
+║        .createTextOutput('OK')                                       ║
+║        .setMimeType(ContentService.MimeType.TEXT);                  ║
+║    } catch(err) {                                                    ║
+║      return ContentService                                           ║
+║        .createTextOutput('Error: ' + err.toString())                ║
+║        .setMimeType(ContentService.MimeType.TEXT);                  ║
+║    }                                                                 ║
+║  }                                                                   ║
+║                                                                      ║
+║  ────────────────────────────────────────────────────────            ║
+║                                                                      ║
+║  ÉTAPE 3 — Déployer le script                                       ║
+║  ────────────────────────────                                        ║
+║  • Cliquez sur "Déployer" → "Nouveau déploiement"                   ║
+║  • Type : Application Web                                            ║
+║  • Exécuter en tant que : Moi                                        ║
+║  • Autoriser l'accès à : Tout le monde                               ║
+║  • Cliquez sur "Déployer" → Autorisez l'accès                       ║
+║  • Copiez l'URL affichée (URL de l'application Web)                 ║
+║                                                                      ║
+║  ÉTAPE 4 — Insérer l'URL dans ce fichier HTML                       ║
+║  ──────────────────────────────────────────────                      ║
+║  • Dans ce fichier, trouvez la ligne :                               ║
+║      const GOOGLE_SCRIPT_URL = 'VOTRE_URL_GOOGLE_SCRIPT_ICI';      ║
+║  • Remplacez 'VOTRE_URL_GOOGLE_SCRIPT_ICI' par votre URL copiée    ║
+║                                                                      ║
+║  Exemple :                                                           ║
+║    const GOOGLE_SCRIPT_URL =                                         ║
+║      'https://script.google.com/macros/s/AKfy.../exec';            ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+-->
+
+</body>
+</html>
