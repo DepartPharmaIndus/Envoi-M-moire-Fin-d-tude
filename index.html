@@ -435,7 +435,7 @@
    ➤ Remplacez la valeur ci-dessous par l'URL de votre Google Apps Script
      (voir les instructions étape par étape à la fin de ce fichier)
 ══════════════════════════════════════════════════════════════════════ */
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPbF_3SSMnCNkWgKvRuV_PBmR4swCb01HlUbvQbmGf_tnB3rq2IcKv-y1FlnQRDm4/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyj64Acn_5HNrZObpBReoEi4afC4Cm4_Gn1IWonSuYuw7qTNmTIvfehEMWUIts78qWB/exec';
 /* ══════════════════════════════════════════════════════════════════════ */
 
 
@@ -483,7 +483,7 @@ const SPECS = [
   },
 ];
 
-const TOTAL = 12; // Nombre de champs obligatoires
+const TOTAL = 11; // Nombre de champs obligatoires
 
 
 /* ─── Génération du HTML du formulaire ─── */
@@ -528,19 +528,11 @@ function buildForm(s) {
           <div class="emsg" id="e-${s.id}-email">Veuillez entrer une adresse email valide.</div>
         </div>
 
-        <div class="g2">
-          <div class="fld">
-            <label class="lbl" for="${s.id}-num">Numéro sur la liste <span class="req">*</span></label>
-            <input class="inp" type="number" id="${s.id}-num"
-                   name="numero" placeholder="Ex : 42" min="1">
-            <div class="emsg" id="e-${s.id}-num">Ce champ est obligatoire.</div>
-          </div>
-          <div class="fld">
-            <label class="lbl" for="${s.id}-bac">Année bac <span class="req">*</span></label>
-            <input class="inp" type="number" id="${s.id}-bac"
-                   name="annee_bac" placeholder="Ex : 2022" min="2000" max="2035">
-            <div class="emsg" id="e-${s.id}-bac">Ce champ est obligatoire.</div>
-          </div>
+        <div class="fld">
+          <label class="lbl" for="${s.id}-num">Numéro sur la liste <span class="req">*</span></label>
+          <input class="inp" type="number" id="${s.id}-num"
+                 name="numero" placeholder="Ex : 42" min="1">
+          <div class="emsg" id="e-${s.id}-num">Ce champ est obligatoire.</div>
         </div>
 
         <div class="fld">
@@ -631,16 +623,16 @@ function buildForm(s) {
         </div>
       </div><!-- /sec Stage -->
 
-      <!-- ── Rapport & Lieu de stage ── -->
+      <!-- ── Rapport & Lieu de Stage ── -->
       <div class="sec">
-        <div class="sec-lbl">Rapport &amp; Lieu de stage</div>
+        <div class="sec-lbl">Rapport &amp; Lieu de Stage</div>
 
         <div class="fld">
           <label class="lbl" for="${s.id}-etab">
             Lieu de stage <span class="req">*</span>
           </label>
           <input class="inp" type="text" id="${s.id}-etab"
-                 name="Lieu de stage" placeholder="Ex : Saidal — Alger">
+                 name="lieu_stage" placeholder="Ex : Saidal — Alger">
           <div class="emsg" id="e-${s.id}-etab">Ce champ est obligatoire.</div>
         </div>
 
@@ -801,7 +793,6 @@ function updateProg(id, form) {
   const required = [
     getVal(form, 'email'),
     getVal(form, 'numero'),
-    getVal(form, 'annee_bac'),
     getVal(form, 'matricule'),
     getVal(form, 'nom'),
     getVal(form, 'prenom'),
@@ -809,7 +800,7 @@ function updateProg(id, form) {
     getVal(form, 'debut_stage'),
     getVal(form, 'fin_stage'),
     getVal(form, 'encadrant'),
-    getVal(form, 'Lieu de stage'),
+    getVal(form, 'lieu_stage'),
     getVal(form, 'lien_drive'),
   ];
   const filled = required.filter(Boolean).length;
@@ -835,7 +826,6 @@ function validate(s, form) {
   check(`e-${s.id}-email`,
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(getVal(form, 'email')));
   check(`e-${s.id}-num`,   getVal(form, 'numero')       !== '');
-  check(`e-${s.id}-bac`,   getVal(form, 'annee_bac')    !== '');
   check(`e-${s.id}-mat`,   getVal(form, 'matricule')    !== '');
   check(`e-${s.id}-nom`,   getVal(form, 'nom')          !== '');
   check(`e-${s.id}-prn`,   getVal(form, 'prenom')       !== '');
@@ -843,7 +833,7 @@ function validate(s, form) {
   check(`e-${s.id}-deb`,   getVal(form, 'debut_stage')  !== '');
   check(`e-${s.id}-fin`,   getVal(form, 'fin_stage')    !== '');
   check(`e-${s.id}-enc`,   getVal(form, 'encadrant')    !== '');
-  check(`e-${s.id}-etab`,  getVal(form, 'Lieu de stage') !== '');
+  check(`e-${s.id}-etab`,  getVal(form, 'lieu_stage')   !== '');
   check(`e-${s.id}-lien`,  getVal(form, 'lien_drive').startsWith('https://'));
 
   return ok;
@@ -870,7 +860,6 @@ async function handleSubmit(e, s, form) {
     specialite:    s.label,
     email:         getVal(form, 'email'),
     numero:        getVal(form, 'numero'),
-    annee_bac:     getVal(form, 'annee_bac'),
     matricule:     getVal(form, 'matricule'),
     nom:           getVal(form, 'nom'),
     prenom:        getVal(form, 'prenom'),
@@ -879,7 +868,7 @@ async function handleSubmit(e, s, form) {
     fin_stage:     getVal(form, 'fin_stage'),
     encadrant:     getVal(form, 'encadrant'),
     co_encadrant:  getVal(form, 'co_encadrant'),
-    Lieu de stage: getVal(form, 'Lieu de stage'),
+    lieu_stage:    getVal(form, 'lieu_stage'),
     lien_drive:    getVal(form, 'lien_drive'),
   });
 
@@ -935,9 +924,9 @@ async function handleSubmit(e, s, form) {
 ║      if (sheet.getLastRow() === 0) {                                ║
 ║        var headers = [                                               ║
 ║          'Date/Heure', 'Spécialité', 'Email', 'N° Liste',          ║
-║          'Année Bac', 'Matricule', 'NOM', 'PRÉNOM',                ║
+║          'Matricule', 'NOM', 'PRÉNOM',                              ║
 ║          'Mode', 'Début Stage', 'Fin Stage',                        ║
-║          'Encadrant', 'Co-Encadrant', 'Lieu de stage',              ║
+║          'Encadrant', 'Co-Encadrant', 'Lieu de Stage',              ║
 ║          'Lien Drive PDF'                                            ║
 ║        ];                                                            ║
 ║        sheet.appendRow(headers);                                     ║
@@ -952,7 +941,6 @@ async function handleSubmit(e, s, form) {
 ║        e.parameter.specialite    || '',                              ║
 ║        e.parameter.email         || '',                              ║
 ║        e.parameter.numero        || '',                              ║
-║        e.parameter.annee_bac     || '',                              ║
 ║        e.parameter.matricule     || '',                              ║
 ║        e.parameter.nom           || '',                              ║
 ║        e.parameter.prenom        || '',                              ║
@@ -961,7 +949,7 @@ async function handleSubmit(e, s, form) {
 ║        e.parameter.fin_stage     || '',                              ║
 ║        e.parameter.encadrant     || '',                              ║
 ║        e.parameter.co_encadrant  || '',                              ║
-║        e.parameter.Lieu de stage || '',                              ║
+║        e.parameter.lieu_stage    || '',                              ║
 ║        e.parameter.lien_drive    || '',                              ║
 ║      ]);                                                             ║
 ║                                                                      ║
