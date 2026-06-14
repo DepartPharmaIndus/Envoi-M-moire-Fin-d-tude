@@ -631,16 +631,16 @@ function buildForm(s) {
         </div>
       </div><!-- /sec Stage -->
 
-      <!-- ── Rapport & Établissement ── -->
+      <!-- ── Rapport & Lieu de stage ── -->
       <div class="sec">
-        <div class="sec-lbl">Rapport &amp; Établissement</div>
+        <div class="sec-lbl">Rapport &amp; Lieu de stage</div>
 
         <div class="fld">
           <label class="lbl" for="${s.id}-etab">
-            Nom de l'établissement <span class="req">*</span>
+            Lieu de stage <span class="req">*</span>
           </label>
           <input class="inp" type="text" id="${s.id}-etab"
-                 name="etablissement" placeholder="Ex : Saidal — Alger">
+                 name="Lieu de stage" placeholder="Ex : Saidal — Alger">
           <div class="emsg" id="e-${s.id}-etab">Ce champ est obligatoire.</div>
         </div>
 
@@ -809,7 +809,7 @@ function updateProg(id, form) {
     getVal(form, 'debut_stage'),
     getVal(form, 'fin_stage'),
     getVal(form, 'encadrant'),
-    getVal(form, 'etablissement'),
+    getVal(form, 'Lieu de stage'),
     getVal(form, 'lien_drive'),
   ];
   const filled = required.filter(Boolean).length;
@@ -843,7 +843,7 @@ function validate(s, form) {
   check(`e-${s.id}-deb`,   getVal(form, 'debut_stage')  !== '');
   check(`e-${s.id}-fin`,   getVal(form, 'fin_stage')    !== '');
   check(`e-${s.id}-enc`,   getVal(form, 'encadrant')    !== '');
-  check(`e-${s.id}-etab`,  getVal(form, 'etablissement') !== '');
+  check(`e-${s.id}-etab`,  getVal(form, 'Lieu de stage') !== '');
   check(`e-${s.id}-lien`,  getVal(form, 'lien_drive').startsWith('https://'));
 
   return ok;
@@ -879,7 +879,7 @@ async function handleSubmit(e, s, form) {
     fin_stage:     getVal(form, 'fin_stage'),
     encadrant:     getVal(form, 'encadrant'),
     co_encadrant:  getVal(form, 'co_encadrant'),
-    etablissement: getVal(form, 'etablissement'),
+    Lieu de stage: getVal(form, 'Lieu de stage'),
     lien_drive:    getVal(form, 'lien_drive'),
   });
 
@@ -937,7 +937,7 @@ async function handleSubmit(e, s, form) {
 ║          'Date/Heure', 'Spécialité', 'Email', 'N° Liste',          ║
 ║          'Année Bac', 'Matricule', 'NOM', 'PRÉNOM',                ║
 ║          'Mode', 'Début Stage', 'Fin Stage',                        ║
-║          'Encadrant', 'Co-Encadrant', 'Établissement',              ║
+║          'Encadrant', 'Co-Encadrant', 'Lieu de stage',              ║
 ║          'Lien Drive PDF'                                            ║
 ║        ];                                                            ║
 ║        sheet.appendRow(headers);                                     ║
@@ -961,7 +961,7 @@ async function handleSubmit(e, s, form) {
 ║        e.parameter.fin_stage     || '',                              ║
 ║        e.parameter.encadrant     || '',                              ║
 ║        e.parameter.co_encadrant  || '',                              ║
-║        e.parameter.etablissement || '',                              ║
+║        e.parameter.Lieu de stage || '',                              ║
 ║        e.parameter.lien_drive    || '',                              ║
 ║      ]);                                                             ║
 ║                                                                      ║
